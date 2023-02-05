@@ -1,0 +1,40 @@
+swagger: '2.0'
+info:
+  description: OpenAI API ドキュメント
+  version: 0.0.1
+  title: OpenAI API REST APIs
+#host: urapi.herokuapp.com
+basePath: /api
+tags:
+  - name: openapi
+    description: Open API
+schemes:
+  - http
+  - https
+paths:
+  /complete:
+    post:
+      tags:
+        - openapi
+      summary: Complete Query
+      description: Complete Query Open API
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/CompleteRequest'
+      responses:
+        '200':
+          description: 成功
+        '400':
+          description: エラー
+definitions:
+  CompleteRequest:
+    type: object
+    properties:
+      prompt:
+        type: string
+        description: （日本語）テキスト
+        required: true

@@ -1,0 +1,77 @@
+.balloon-r, .balloon-l{
+  position: relative;
+  padding: 20px;
+}
+
+.balloon-r{
+  background-color: #cfc;
+  border: 2px solid #8c8;
+}
+
+.balloon-r::before{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  right: -15px;
+  top: 20px;
+  border-left: 15px solid #8c8;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+.balloon-r::after{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  right: -12px;
+  top: 20px;
+  border-left: 15px solid #cfc;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+.balloon-l{
+  background-color: #fcc;
+  border: 2px solid #c88;
+}
+
+.balloon-l::after{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: -12px;
+  top: 20px;
+  border-right: 15px solid #fcc;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+.balloon-l::before{
+  content: '';
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  left: -15px;
+  top: 20px;
+  border-right: 15px solid #c88;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+#for-debug{
+  display: none;
+}
+
+#result_texts{
+  height: 300px;
+/*  overflow-x: hidden;
+  overflow-y: scroll; */
+}
+
