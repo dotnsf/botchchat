@@ -40,7 +40,7 @@
 
 - 「ぼっちチャット開始」ボタンをクリックしてマイクに話しかける
 
-  - ![サンプル](/imgs/sample.png)
+  - ![サンプル](https://raw.githubusercontent.com/dotnsf/botchchat/main/public/imgs/sample.png)
 
 
 ## Reference
