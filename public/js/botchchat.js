@@ -24,7 +24,7 @@ function vr_function(){
   };
   recognition.onsoundend = function(){
     $('#status').val( '停止中' );
-    vr_function();
+    ///vr_function();
   };
 
   recognition.onresult = function( event ){
@@ -76,21 +76,30 @@ function openAiChat( prompt ){
   })
 }
 
-var on_speech = false;  //. 使わない？
 $(function(){
-  document.querySelector( "#sample_speech" ).addEventListener( "play", function( e ){
-    on_speech = true;
-    $('#start_btn').removeClass( 'btn-danger' );
-    $('#start_btn').addClass( 'btn-primary' );
-    $('#start_btn').val( '話し中' );
-  });
-  document.querySelector( "#sample_speech" ).addEventListener( "ended", function( e ){
-    on_speech = false;
-    $('#result_text').css( 'display', 'block' );
-    vr_function();
-  });
 });
 
+var uttr = null;
+
 function speechText( text ){
-  $('#sample_speech').attr( 'src', '/api/t2s?text=' + text );
+  //$('#sample_speech').attr( 'src', '/api/t2s?text=' + text );
+  //. https://web-creates.com/code/js-web-speech-api/
+  if( 'speechSynthesis' in window ){
+    var voices = window.speechSynthesis.getVoices();
+    //console.log( { voices } );
+
+    uttr = new SpeechSynthesisUtterance();
+    uttr.text = text;
+    uttr.lang = 'ja-JP';
+
+    window.speechSynthesis.speak( uttr );
+    uttr.onend = speechEnd;
+  }else{
+    alert( 'このブラウザは Web Speech API に未対応です。')
+  }
+}
+
+function speechEnd( evt ){
+  //console.log( {evt} );
+  vr_function();
 }

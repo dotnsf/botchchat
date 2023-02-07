@@ -5,9 +5,6 @@ var express = require( 'express' ),
     { Configuration, OpenAIApi } = require( 'openai' ),
     app = express();
 
-var T2S = require( 'ibm-watson/text-to-speech/v1' );
-var { IamAuthenticator } = require( 'ibm-watson/auth' );
-
 require( 'dotenv' ).config();
 
 //. env values
@@ -15,9 +12,6 @@ var settings_apikey = 'API_KEY' in process.env ? process.env.API_KEY : '';
 var settings_organization = 'ORGANIZATION' in process.env ? process.env.ORGANIZATION : ''; 
 var settings_port = 'PORT' in process.env ? process.env.PORT : 8080; 
 var settings_cors = 'CORS' in process.env ? process.env.CORS : ''; 
-var settings_t2s_apikey = 'T2S_API_KEY' in process.env ? process.env.T2S_API_KEY : ''; 
-var settings_t2s_url = 'T2S_URL' in process.env ? process.env.T2S_URL : ''; 
-var settings_t2s_lang = 'T2S_LANG' in process.env ? process.env.T2S_LANG : 'ja-JP_EmiVoice'; 
 
 app.use( express.static( __dirname + '/public' ) );
 app.use( bodyParser.urlencoded( { extended: true } ) );
@@ -101,47 +95,23 @@ app.post( '/api/complete', async function( req, res ){
     option.n = parseInt( req.body.n );
   }
 
-  var result = await openai.createCompletion( option );
-  var answer = result.data.choices[0].text;
+  var answer = '';
+  try{
+    var result = await openai.createCompletion( option );
+    answer = result.data.choices[0].text;
 
-  //. 最初の "\n\n" 以降が正しい回答？
-  var tmp = answer.split( "\n\n" );
-  if( tmp.length > 1 && tmp[0].length < settings_ignore_phrase ){
-    tmp.shift();
-    answer = tmp.join( "\n\n" );
+    //. 最初の "\n\n" 以降が正しい回答？
+    var tmp = answer.split( "\n\n" );
+    if( tmp.length > 1 && tmp[0].length < settings_ignore_phrase ){
+      tmp.shift();
+      answer = tmp.join( "\n\n" );
+    }
+  }catch( e ){
+    answer = '' + e;
   }
 
   res.write( JSON.stringify( { status: true, result: answer }, null, 2 ) );
   res.end();
-});
-
-//. Text to Speech
-var t2s = new T2S({
-  authenticator: new IamAuthenticator({ apikey: settings_t2s_apikey }),
-  version: '2018-05-01',
-  serviceUrl: settings_t2s_url
-});
-app.get( '/api/t2s', function( req, res ){
-  //. https://www.ibm.com/watson/developercloud/text-to-speech/api/v1/?node#synthesize_audio
-  var text = req.query.text;
-  var voice = 'ja-JP_EmiVoice';
-
-  var params = {
-    text: text,
-    accept: 'audio/wav',
-    voice: voice
-  };
-
-  if( t2s ){
-    t2s.synthesize( params )
-    .then( response => {
-      return t2s.repairWavHeaderStream( response.result );
-    }).then( buffer => {
-      res.writeHead( 200, { 'Content-Type': 'audio/wav' } );
-      res.write( buffer );
-      res.end();
-    });
-  }
 });
 
 app.listen( settings_port );

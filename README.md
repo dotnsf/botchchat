@@ -16,19 +16,13 @@
 
   - `$ npm install` 
 
-- 以下２つ（項目としては４つ）の情報を取得する：
+- 以下２つの情報を取得する：
 
   - OpenAI のアカウントを取得し、API Key と Organization ID を取得する：
 
     - `https://beta.openai.com/`
 
-  - IBM Cloud のアカウントを取得し、Watson Text to Speech サービスのインスタンスを作り（無料プランで可）、API Key と サービス URL を取得する：
-
-    - `https://www.ibm.com/jp-ja/cloud/watson-text-to-speech`
-
 - 取得した情報をソースコード内の `.env` ファイルに転記
-
-  - `T2S_LANG` は `Watson Text to Speech` のスピーチに使う言語モデル。無指定時のデフォルトは `ja-JP_EmiVoice`
 
 - アプリケーションを起動
 
